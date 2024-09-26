@@ -14,7 +14,7 @@ import SplashScreen from './src/screens/SplashScreen';
 const AuthStack = createNativeStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator initialRouteName="SplashScreen">
-    <AuthStack.Screen name="StartScreen" component={StartScreen} />
+    <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ headerShown: false }} />
     <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
     <AuthStack.Screen name="LoginScreen" component={LoginScreen} />
     <AuthStack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />

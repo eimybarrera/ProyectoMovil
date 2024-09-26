@@ -1,12 +1,52 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Text,
   View,
   TouchableOpacity,
   StyleSheet,
-  TextInput,Image
+  TextInput,Image, Alert
 } from "react-native";
 const RegisterScreen = ({ navigation }) => {
+
+  const [nombre,setNombre]= useState('')
+  const [email,setEmail]= useState('')
+  const [contrasenia,setContrasenia]= useState('')
+  const [fecha_nacimiento,setFecha_nacimiento]= useState('')
+  const [direccion,setDireccion]= useState('')
+  const [genero,setgenero]= useState('')
+
+  const handleRegistrer= async()=>{
+    const userData={
+      nombre,
+      email,
+      contrasenia,
+      fecha_nacimiento,
+      direccion,
+      genero,
+    }
+    console.log('Datos enviados:', userData);
+    try{
+      const response =await fetch('http://localhost:8080/api/movil/pacientes',{
+        method:'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
+      //const result = await response.text(); si mi backen retorna un string 
+      const result = await response.json(); //si mi backen retorna un json 
+      if (response.ok) {
+       // console.log('Respuesta del servidor:', result) si quiero mostrar en pantalla el texto que retorna mi backen
+        navigation.navigate("Main");
+      }else{
+        Alert.alert('Error', result.message || 'Hubo un problema con el registro.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo conectar con el servidor.');
+    }
+    }
+  
+  
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -18,14 +58,14 @@ const RegisterScreen = ({ navigation }) => {
       </View>
       <Text style={styles.titulo}>Create Account</Text>
       <Text style={styles.subTitulo}> We are here to help you!</Text>
-      <TextInput placeholder="Your Name" style={styles.imput} />
-      <TextInput placeholder="Your Email" style={styles.imput} />
-      <TextInput placeholder="Your Password" style={styles.imput} />
-      <TextInput placeholder="Your Emain" style={styles.imput} />
-      <TextInput placeholder="Date of Birth" style={styles.imput} />
-      <TextInput placeholder="Gender" style={styles.imput} />
+      <TextInput placeholder="nombre" style={styles.imput} value={nombre}  onChangeText={setNombre}  />
+      <TextInput placeholder="email" style={styles.imput} value={email} onChangeText={setEmail} />
+      <TextInput placeholder="contrasenia" style={styles.imput} value={contrasenia} onChangeText={setContrasenia} />
+      <TextInput placeholder="fecha_nacimiento" style={styles.imput} value={fecha_nacimiento} onChangeText={setFecha_nacimiento} />
+      <TextInput placeholder="direccion" style={styles.imput} value={direccion} onChangeText={setDireccion}/>
+      <TextInput placeholder="genero" style={styles.imput} value={genero} onChangeText={setgenero}/>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Main")}
+        onPress={handleRegistrer}
         style={styles.touch}
       >
         <Text style={styles.text}> Sign In</Text>
